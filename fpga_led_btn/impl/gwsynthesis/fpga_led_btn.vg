@@ -1,0 +1,75 @@
+//
+//Written by GowinSynthesis
+//Product Version "GowinSynthesis V1.9.6Beta"
+//Sat Aug 01 21:40:03 2020
+
+//Source file index table:
+//file0 "\C:/Users/Vincent/Documents/fpga_led_btn/src/led_btn.vhd"
+`timescale 100 ps/100 ps
+module fpga (
+  btn_A_i,
+  btn_B_i,
+  led_G_o,
+  led_B_o,
+  led_R_o
+)
+;
+input btn_A_i;
+input btn_B_i;
+output led_G_o;
+output led_B_o;
+output led_R_o;
+wire btn_A_i_d;
+wire btn_B_i_d;
+wire led_B_o_0;
+wire led_G_o_1;
+wire led_R_o_2;
+wire VCC;
+wire GND;
+  IBUF btn_A_i_ibuf (
+    .O(btn_A_i_d),
+    .I(btn_A_i) 
+);
+  IBUF btn_B_i_ibuf (
+    .O(btn_B_i_d),
+    .I(btn_B_i) 
+);
+  TBUF led_G_o_s1 (
+    .O(led_G_o),
+    .I(btn_A_i_d),
+    .OEN(led_G_o_1) 
+);
+  TBUF led_R_o_s1 (
+    .O(led_R_o),
+    .I(btn_B_i_d),
+    .OEN(led_R_o_2) 
+);
+  TBUF led_B_o_s1 (
+    .O(led_B_o),
+    .I(GND),
+    .OEN(led_B_o_0) 
+);
+  LUT2 led_B_o_s4 (
+    .F(led_B_o_0),
+    .I0(btn_A_i_d),
+    .I1(btn_B_i_d) 
+);
+defparam led_B_o_s4.INIT=4'hE;
+  INV led_G_o_s5 (
+    .O(led_G_o_1),
+    .I(btn_B_i_d) 
+);
+  INV led_R_o_s5 (
+    .O(led_R_o_2),
+    .I(btn_A_i_d) 
+);
+  VCC VCC_cZ (
+    .V(VCC)
+);
+  GND GND_cZ (
+    .G(GND)
+);
+  GSR GSR (
+    .GSRI(VCC) 
+);
+endmodule /* fpga */
